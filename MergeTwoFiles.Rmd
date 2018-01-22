@@ -1,0 +1,42 @@
+---
+title: "MergeTwoFiles"
+author: "Lindsay Rutter"
+date: "1/22/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This script will merge the SRA files from the diabetes.data and add.samp.meta dataframes.
+
+# Read in add.samp.meta file
+```{r}
+add.samp.meta.read <- read.table(file = "E-MTAB-5061.sdrf.txt", sep = "\t")
+add.samp.meta <- add.samp.meta.read[2:dim(add.samp.meta.read)[1],]
+
+for (i in 1:39){
+colnames(add.samp.meta)[i] <- as.character(add.samp.meta.read[1,i])
+}
+rownames(add.samp.meta) <- add.samp.meta$`Comment[ENA_RUN]`
+
+add.samp.meta <- data.frame(add.samp.meta, 'name' = rownames(add.samp.meta))
+```
+
+# Read in diabetes.data file
+```{r}
+diabetes.data <- read.csv("new_diabetes_and_cftr.csv")
+```
+
+# Check merging columns are identical 
+```{r}
+identical(labels(diabetes.data$SRA), labels(add.samp.meta$Comment.ENA_RUN.))
+```
+
+```{r}
+(m1 <- merge(add.samp.meta, diabetes.data, by.x = "Comment.ENA_RUN.", by.y = "SRA"))
+```
+
