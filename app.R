@@ -2,7 +2,7 @@
 library(shiny)
 
 # Load data
-data <- readRDS("m1.Rds")
+data <- read_csv("m1.csv")
 
 # Define UI
 ui <- fluidPage(
