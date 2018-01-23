@@ -15,6 +15,8 @@ This script will merge the SRA files from the diabetes.data and add.samp.meta da
 
 # Read in add.samp.meta file
 ```{r}
+library(dplyr)
+
 add.samp.meta.read <- read.table(file = "E-MTAB-5061.sdrf.txt", sep = "\t")
 add.samp.meta <- add.samp.meta.read[2:dim(add.samp.meta.read)[1],]
 
@@ -31,14 +33,27 @@ add.samp.meta <- data.frame(add.samp.meta, 'name' = rownames(add.samp.meta))
 diabetes.data <- read.csv("new_diabetes_and_cftr.csv")
 ```
 
-# Check merging columns are identical 
+# Check merging columns on SRA are identical 
 ```{r}
 identical(labels(diabetes.data$SRA), labels(add.samp.meta$Comment.ENA_RUN.))
 ```
 
+# Merge the two files together by SRA
 ```{r}
 (m1 <- merge(add.samp.meta, diabetes.data, by.x = "Comment.ENA_RUN.", by.y = "SRA"))
 saveRDS(m1,"m1.Rds")
-write.csv(m1, "m1.csv")
 ```
 
+# Take subset of columns from merged data frame
+```{r}
+m1_sub <- m1 %>% select(Characteristics.organism., Characteristics.organism.part., Characteristics.individual., Characteristics.single.cell.well.quality., Factor.Value.cell.type., Characteristics.sex., Characteristics.age., Characteristics.body.mass.index., Factor.Value.disease., Heterozygous.SNPs, Homozygous.SNPs)
+colnames(m1_sub) <- c("Organism", "Organism part", "Individual", "Quality", "Cell", "Sex", "Age", "BMI", "Disease", "Heterozygous.SNP", "Homozygous.SNP")
+write.csv(m1_sub, "m1_sub.csv")
+```
+
+# Change the semicolon format of Heterozygous.SNP and Homozygous.SNP columns to list format
+```{r}
+m1_sub$Homozygous.SNP <- lapply(m1_sub$Homozygous.SNP, function(x){strsplit((as.character(x)), ";")})
+m1_sub$Heterozygous.SNP <- lapply(m1_sub$Heterozygous.SNP, function(x){strsplit((as.character(x)), ";")})
+saveRDS(m1_sub, "m1_sub.Rds")
+```
