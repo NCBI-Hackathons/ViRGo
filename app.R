@@ -2,7 +2,7 @@
 library(shiny)
 
 # Load data
-data <- read_csv("m1.csv")
+data <- readRDS("m1_sub.Rds")
 
 # Define UI
 ui <- fluidPage(
@@ -26,7 +26,9 @@ ui <- fluidPage(
     mainPanel(
       
       # Output: Verbatim text for data summary ----
-      verbatimTextOutput("summary")
+      verbatimTextOutput("summary"),
+      
+      plotlyOutput("diseaseSNP")
       
     )
   )
@@ -41,7 +43,11 @@ server <- function(input, output) {
   # Generate a summary of the column ----
   output$summary <- renderPrint({
     column <- columnInput()
-    summary(data[column])
+    table(data[column])
+  })
+  
+  output$diseaseSNP <- renderPlotly({
+    
   })
   
 }
