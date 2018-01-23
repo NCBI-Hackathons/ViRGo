@@ -38,5 +38,7 @@ identical(labels(diabetes.data$SRA), labels(add.samp.meta$Comment.ENA_RUN.))
 
 ```{r}
 (m1 <- merge(add.samp.meta, diabetes.data, by.x = "Comment.ENA_RUN.", by.y = "SRA"))
+saveRDS(m1,"m1.Rds")
+write.csv(m1, "m1.csv")
 ```
 
