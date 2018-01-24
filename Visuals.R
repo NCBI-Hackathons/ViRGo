@@ -1,5 +1,9 @@
 # Load packages
 library(shiny)
+library(plotly)
+library(tidyr)
+library(ggplot2)
+library(dplyr)
 
 # Load data
 data <- readRDS("m1_sub.Rds")
@@ -7,66 +11,129 @@ data <- readRDS("m1_sub.Rds")
 # Define UI
 ui <- fluidPage(
   
-  # App title ----
-  titlePanel("Data Column Information"),
-  
-  # Sidebar layout with a input and output definitions ----
-  sidebarLayout(
-    
-    # Sidebar panel for inputs ----
-    sidebarPanel(
-      selectizeInput(inputId = "Organism", label ="Organism", choices = unique(data$Organism), selected = unique(data$Organism), multiple = TRUE, options = NULL),
-      selectizeInput(inputId = "OrganismPart", label ="Organism Part", choices = unique(data$OrganismPart), selected = unique(data$OrganismPart), multiple = TRUE, options = NULL),
-      selectizeInput(inputId = "Individual", label ="Individual", choices = unique(data$Individual), selected = unique(data$Individual), multiple = TRUE, options = NULL),
-      selectizeInput(inputId = "Quality", label ="Quality", choices = unique(data$Quality), selected = unique(data$Quality), multiple = TRUE, options = NULL),
-      selectizeInput(inputId = "Cell", label ="Cell", choices = unique(data$Cell), selected = unique(data$Cell), multiple = TRUE, options = NULL),
-      selectizeInput(inputId = "Sex", label ="Sex", choices = unique(data$Sex), selected = unique(data$Sex), multiple = TRUE, options = NULL),
-      selectizeInput(inputId = "Disease", label ="Disease", choices = unique(data$Disease), selected = unique(data$Disease), multiple = TRUE, options = NULL),
-      radioButtons(inputId = "Fill",
-         label = "Fill by:",
-         choices = colnames(data)[-which(colnames(data) %in% c("Heterozygous.SNP","Homozygous.SNP"))],
-         selected = "Disease")
-    ),
-    
-    # Main panel for displaying outputs ----
-    mainPanel(
-      plotlyOutput("homoBarPlot"),
-      plotlyOutput("heteroBarPlot")
+  # App title
+  titlePanel("SCRVV"),
+  mainPanel(
+    tabsetPanel(type = "tabs", id="tabs",
+                tabPanel("All Columns", value=1,
+                         verbatimTextOutput("all_columns")),
+                tabPanel("Summary", value=2,
+                  sidebarPanel(uiOutput("sidebar_summary")),
+                  verbatimTextOutput("summary")),
+                tabPanel("Unique", value=3,
+                  sidebarPanel(uiOutput("sidebar_unique")),
+                  verbatimTextOutput("unique")),
+                tabPanel("Lutter", value=4,
+                  sidebarPanel(
+                    selectizeInput(inputId = "Organism", label ="Organism", choices = unique(data$Organism), selected = unique(data$Organism), multiple = TRUE, options = NULL),
+                    selectizeInput(inputId = "OrganismPart", label ="Organism Part", choices = unique(data$OrganismPart), selected = unique(data$OrganismPart), multiple = TRUE, options = NULL),
+                    selectizeInput(inputId = "Individual", label ="Individual", choices = unique(data$Individual), selected = unique(data$Individual), multiple = TRUE, options = NULL),
+                    selectizeInput(inputId = "Quality", label ="Quality", choices = unique(data$Quality), selected = unique(data$Quality), multiple = TRUE, options = NULL),
+                    selectizeInput(inputId = "Cell", label ="Cell", choices = unique(data$Cell), selected = unique(data$Cell), multiple = TRUE, options = NULL),
+                    selectizeInput(inputId = "Sex", label ="Sex", choices = unique(data$Sex), selected = unique(data$Sex), multiple = TRUE, options = NULL),
+                    selectizeInput(inputId = "Disease", label ="Disease", choices = unique(data$Disease), selected = unique(data$Disease), multiple = TRUE, options = NULL)
+                    , #uiOutput("sidebar_lutter")
+                    radioButtons(inputId = "Fill",
+                     label = "Fill by:",
+                     choices = colnames(data)[-which(colnames(data) %in% c("Heterozygous.SNP","Homozygous.SNP"))],
+                     selected = "Disease") 
+                  ),
+                  plotlyOutput("homoBarPlot"),
+                  plotlyOutput("heteroBarPlot")
+                )
     )
   )
 )
 
 # Define server logic
 server <- function(input, output) {
-  
-  # Return the requested column ----
-  
-  output$homoBarPlot <- renderPlotly({
-    data2 <- data %>% filter(Organism %in% as.character(input$Organism) & 
-             OrganismPart %in% as.character(input$OrganismPart) &
-             Individual %in% as.character(input$Individual) & 
-             Quality %in% as.character(input$Quality) & 
-             Cell %in% as.character(input$Cell) & 
-             Sex %in% as.character(input$Sex) &
-             Disease %in% as.character(input$Disease)) %>% select(-Heterozygous.SNP)
-    data3 <- separate_rows(data2, Homozygous.SNP) %>% filter(Homozygous.SNP!="")
-    p <- ggplot(data3, aes(Homozygous.SNP)) + geom_bar(aes_string(fill=input$Fill))
-    py <- ggplotly(p)
-    py
+  output$all_columns <- renderPrint({
+    if (input$tabs == 1){
+      for (i in 1:11) {
+        cat(colnames(data)[i], "\n")
+      }
+    }
   })
-  
+  output$sidebar_summary <- renderUI({
+    if (input$tabs == 2){
+      radioButtons(inputId = "column",
+                   label = "Choose a column:",
+                   choices = colnames(data)[1:9])
+    }
+  })
+  output$summary <- renderPrint({
+    summary(data[input$column])
+  })
+  output$sidebar_unique <- renderUI({
+    if(input$tabs == 3){
+      radioButtons(inputId = "column2",
+                   label = "Choose a column:",
+                   choices = colnames(data))
+    }
+  })
+  output$unique <- renderPrint({
+    unique(data[input$column2])
+  })
+  output$sidebar_lutter <- renderUI({
+    if (input$tabs == 4){
+      # selectizeInput(inputId = "Organism", label ="Organism", choices = unique(data$Organism), selected = unique(data$Organism), multiple = TRUE, options = NULL)
+      # selectizeInput(inputId = "OrganismPart", label ="Organism Part", choices = unique(data$OrganismPart), selected = unique(data$OrganismPart), multiple = TRUE, options = NULL)
+      # selectizeInput(inputId = "Individual", label ="Individual", choices = unique(data$Individual), selected = unique(data$Individual), multiple = TRUE, options = NULL)
+      # selectizeInput(inputId = "Quality", label ="Quality", choices = unique(data$Quality), selected = unique(data$Quality), multiple = TRUE, options = NULL)
+      # selectizeInput(inputId = "Cell", label ="Cell", choices = unique(data$Cell), selected = unique(data$Cell), multiple = TRUE, options = NULL)
+      # selectizeInput(inputId = "Sex", label ="Sex", choices = unique(data$Sex), selected = unique(data$Sex), multiple = TRUE, options = NULL)
+      # selectizeInput(inputId = "Disease", label ="Disease", choices = unique(data$Disease), selected = unique(data$Disease), multiple = TRUE, options = NULL)
+      # radioButtons(inputId = "Fill",
+      #              label = "Fill by:",
+      #              choices = colnames(data)[-which(colnames(data) %in% c("Heterozygous.SNP","Homozygous.SNP"))],
+      #              selected = "Disease") 
+    }
+  })
+  output$homoBarPlot <- renderPlotly({
+    if (input$tabs == 4){
+      print("Orrganism")
+      print(input$Organism)
+      print("OrganismPart")
+      print(input$OrganismPart)
+      print("input$Individual")
+      print(input$Individual)
+      print("input$Quality")
+      print(input$Quality)
+      print("input$Cell")
+      print(input$Cell)
+      print("input$Sex")
+      print(input$Sex)
+      print("input$Disease")
+      print(input$Disease)
+      print(str(data))
+      data2 <- data %>% filter(Organism %in% as.character(input$Organism) & 
+               OrganismPart %in% as.character(input$OrganismPart) &
+               Individual %in% as.character(input$Individual) & 
+               Quality %in% as.character(input$Quality) & 
+               Cell %in% as.character(input$Cell) & 
+               Sex %in% as.character(input$Sex) &
+               Disease %in% as.character(input$Disease)) %>% select(-Heterozygous.SNP)
+      print(str(data2))
+      data3 <- separate_rows(data2, Homozygous.SNP) %>% filter(Homozygous.SNP!="")
+      p <- ggplot(data3, aes(Homozygous.SNP)) + geom_bar(aes_string(fill=input$Fill))
+      py <- ggplotly(p)
+      py
+    }
+  })
   output$heteroBarPlot <- renderPlotly({
-    data2 <- data %>% filter(Organism %in% as.character(input$Organism) &
-             OrganismPart %in% as.character(input$OrganismPart) &
-             Individual %in% as.character(input$Individual) &
-             Quality %in% as.character(input$Quality) &
-             Cell %in% as.character(input$Cell) &
-             Sex %in% as.character(input$Sex) &
-             Disease %in% as.character(input$Disease)) %>% select(-Homozygous.SNP)
-    data3 <- separate_rows(data2, Heterozygous.SNP) %>% filter(Heterozygous.SNP!="")
-    p <- ggplot(data3, aes(Heterozygous.SNP)) + geom_bar(aes_string(fill=input$Fill))
-    py <- ggplotly(p)
-    py
+    if (input$tabs == 4) {
+      data2 <- data %>% filter(Organism %in% as.character(input$Organism) &
+               OrganismPart %in% as.character(input$OrganismPart) &
+               Individual %in% as.character(input$Individual) &
+               Quality %in% as.character(input$Quality) &
+               Cell %in% as.character(input$Cell) &
+               Sex %in% as.character(input$Sex) &
+               Disease %in% as.character(input$Disease)) %>% select(-Homozygous.SNP)
+      data3 <- separate_rows(data2, Heterozygous.SNP) %>% filter(Heterozygous.SNP!="")
+      p <- ggplot(data3, aes(Heterozygous.SNP)) + geom_bar(aes_string(fill=input$Fill))
+      py <- ggplotly(p)
+      py
+    }
   })
 }
 
