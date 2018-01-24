@@ -95,7 +95,10 @@ ui <- fluidPage(
                 ),
                 tabPanel("See Whole Data Table", value=5,
                   verbatimTextOutput("Raw"),
-                  DT::dataTableOutput('ex1'))
+                  DT::dataTableOutput('ex1')),
+                tabPanel("Download", value=6,
+                  uiOutput("download")
+                )
     )
   
 )
@@ -172,6 +175,13 @@ server <- function(input, output) {
       output$ex1 <- DT::renderDataTable(DT::datatable(data_table, filter = 'top',escape = FALSE, options = list(pageLength = 10, scrollX='500px',autoWidth = TRUE)))
     }
   })
+
+  output$download <- renderUI({
+    if(input$tabs == 6){
+      tags$div(HTML('<a href="https://raw.githubusercontent.com/NCBI-Hackathons/ViRGo/master/diabetes.csv">Diabetes</a>'))
+    }
+  })
+
 }
 
 # Create Shiny object
