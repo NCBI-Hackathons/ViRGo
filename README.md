@@ -5,7 +5,7 @@ Single Cell RNA Variant Viewer
 * Python 3
 
 ## Qucik Start
-* Download this repo: `git --recursive https://github.com/NCBI-Hackathons/SCRVV`
+* Download this repo: `git clone --recursive https://github.com/NCBI-Hackathons/SCRVV`
 * Collecting output files generated beforehand: `python3 collect_output.py`
 * Follow the steps in [MergeTwoFiles.Rmd](MergeTwoFiles.Rmd) to generate the [m1.Rds](m1.Rds)
 * run [app.R](app.R)
