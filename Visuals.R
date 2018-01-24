@@ -38,7 +38,7 @@ data_table$Homozygous.SNP = unlist(data_table$Homozygous.SNP)
 # Define UI
 ui <- fluidPage(
   # App title
-  tags$h1("SCRVV", align="center"),
+  tags$h1("ViRGo: Variant Report Generator", align="center"),
   # Banner links to our github repo
   tags$div(
     HTML(paste('<a href="https://github.com/NCBI-Hackathons/ViRGo">',
