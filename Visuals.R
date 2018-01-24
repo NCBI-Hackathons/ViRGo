@@ -80,8 +80,7 @@ ui <- fluidPage(
                     selectizeInput(inputId = "Quality", label ="Quality", choices = unique(data$Quality), selected = unique(data$Quality), multiple = TRUE, options = NULL),
                     selectizeInput(inputId = "Cell", label ="Cell", choices = unique(data$Cell), selected = unique(data$Cell), multiple = TRUE, options = NULL),
                     selectizeInput(inputId = "Sex", label ="Sex", choices = unique(data$Sex), selected = unique(data$Sex), multiple = TRUE, options = NULL),
-                    selectizeInput(inputId = "Disease", label ="Disease", choices = unique(data$Disease), selected = unique(data$Disease), multiple = TRUE, options = NULL)
-                    , #uiOutput("sidebar_lutter")
+                    selectizeInput(inputId = "Disease", label ="Disease", choices = unique(data$Disease), selected = unique(data$Disease), multiple = TRUE, options = NULL),
                     radioButtons(inputId = "Fill",
                      label = "Fill by:",
                      choices = colnames(data)[-which(colnames(data) %in% c("Heterozygous.SNP","Homozygous.SNP"))],
@@ -106,6 +105,7 @@ server <- function(input, output) {
       }
     }
   })
+
   output$sidebar_summary <- renderUI({
     if (input$tabs == 2){
       radioButtons(inputId = "column",
@@ -113,9 +113,11 @@ server <- function(input, output) {
                    choices = colnames(data)[1:9])
     }
   })
+
   output$summary <- renderPrint({
     summary(data[input$column])
   })
+
   output$sidebar_unique <- renderUI({
     if(input$tabs == 3){
       radioButtons(inputId = "column2",
@@ -123,13 +125,11 @@ server <- function(input, output) {
                    choices = colnames(data))
     }
   })
+
   output$unique <- renderPrint({
     unique(data[input$column2])
   })
-  output$sidebar_lutter <- renderUI({
-    if (input$tabs == 4){
-    }
-  })
+
   output$homoBarPlot <- renderPlotly({
     if (input$tabs == 4){
       data2 <- data %>% filter(Organism %in% as.character(input$Organism) & 
@@ -145,6 +145,7 @@ server <- function(input, output) {
       py
     }
   })
+
   output$heteroBarPlot <- renderPlotly({
     if (input$tabs == 4) {
       data2 <- data %>% filter(Organism %in% as.character(input$Organism) &
@@ -160,6 +161,7 @@ server <- function(input, output) {
       py
     }
   })
+
   output$Raw <- renderPrint({
     if(input$tabs == 5){
       
