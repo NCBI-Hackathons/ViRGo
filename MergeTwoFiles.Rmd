@@ -53,7 +53,8 @@ write.csv(m1_sub, "m1_sub.csv")
 
 # Change the semicolon format of Heterozygous.SNP and Homozygous.SNP columns to list format
 ```{r}
-m1_sub$Homozygous.SNP <- lapply(m1_sub$Homozygous.SNP, function(x){strsplit((as.character(x)), ";")})
-m1_sub$Heterozygous.SNP <- lapply(m1_sub$Heterozygous.SNP, function(x){strsplit((as.character(x)), ";")})
+#m1_sub$Homozygous.SNP <- lapply(m1_sub$Homozygous.SNP, function(x){strsplit((as.character(x)), ";")})
+#m1_sub$Heterozygous.SNP <- lapply(m1_sub$Heterozygous.SNP, function(x){strsplit((as.character(x)), ";")})
 saveRDS(m1_sub, "m1_sub.Rds")
 ```
+
