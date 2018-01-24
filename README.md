@@ -1,5 +1,7 @@
 # ViRGo: Variant Report Generator 
 
+See our live demo from [here](https://hsiaoyi0504.shinyapps.io/virgo/) !
+
 ## Introduction   
 This project is mainly based on combining result files generated from [SC3](https://github.com/NCBI-Hackathons/SC3), which is a previous product of NCBI Hackathons. SC3 is based on [PSST](https://github.com/NCBI-Hackathons/PSST), which also a product of previous NCBI Hackathon. SC3 takes bioproject and disease name as inputs and has the functionality to map each SRA experiment in that Bioproject to SNP information gathered from NCBI ClinVar. We implemented a customized version of  [SC3](https://github.com/hsiaoyi0504/SC3) to make it operate normally on Ubuntu without SLURM workload manager. We map the single cell RNA-seq data (NCBI  Bioproject accession, PRJEB15401 and EMBL-EBI ArrayExpress E-MTAB-5061) using SC3 to relate   
   
