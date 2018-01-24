@@ -10,7 +10,7 @@ A single individual can process up to 3M SNV and up to 3000 private SNV most of 
 Variant Report Generator (ViRGo) is a reporting and variant browser tools that aggregate information from an RNAseq variant calling pipeline and provide summary and statistics of attributes including individual/sample, phenotype, and variant information to aid in the assessment of biologically relevant variants. It's mainly built on top of an awesome R package [Shiny](https://shiny.rstudio.com/).
   
 ## How to use ViRGo
-1. Download this repo: `git clone https://github.com/NCBI-Hackathons/<this software>.git`
+1. Download this repo: `git clone --recursive https://github.com/NCBI-Hackathons/ViRGo`
 2. Collecting output files generated beforehand: `python3 collect_output.py`
 3. Follow the steps in [MergeTwoFiles.Rmd](MergeTwoFiles.Rmd) to generate the [m1.Rds](m1.Rds)
 4. run [Visualize.R](Visualize.R)  
