@@ -7,6 +7,30 @@ library(dplyr)
 
 # Load data
 data <- readRDS("m1_sub.Rds")
+data_table <- data
+# processing datatable data
+for (i in 1:length(data_table$Heterozygous.SNP)){
+  if(length(data_table$Heterozygous.SNP[[i]][[1]]) == 0){
+    data_table$Heterozygous.SNP[[i]][[1]] = 'NA'
+  } else if(length(data_table$Heterozygous.SNP[[i]][[1]]) != 0) {
+    for (j in 1:length(data_table$Heterozygous.SNP[[i]][[1]])){
+      data_table$Heterozygous.SNP[[i]][[1]][j] = paste0('<a href=\"https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=',data_table$Heterozygous.SNP[[i]][[1]][j],'\">',data$Heterozygous.SNP[[i]][[1]][j],'</a>')
+    }
+  }
+  if(length(data_table$Homozygous.SNP[[i]][[1]]) == 0){
+    data_table$Homozygous.SNP[[i]][[1]] = 'NA'
+  } else if(length(data_table$Homozygous.SNP[[i]][[1]]) != 0) {
+    for (j in 1:length(data_table$Homozygous.SNP[[i]][[1]])){
+      data_table$Homozygous.SNP[[i]][[1]][j] = paste0('<a href=\"https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=',data_table$Homozygous.SNP[[i]][[1]][j],'\">',data$Homozygous.SNP[[i]][[1]][j],'</a>')
+    }
+  }
+
+  data_table$Heterozygous.SNP[i] = paste(unlist(data_table$Heterozygous.SNP[i][1]), collapse=',')
+  data_table$Homozygous.SNP[i] = paste(unlist(data_table$Homozygous.SNP[i][1]), collapse=',')
+
+}
+data_table$Heterozygous.SNP = unlist(data_table$Heterozygous.SNP)
+data_table$Homozygous.SNP = unlist(data_table$Homozygous.SNP)
 
 # Define UI
 ui <- fluidPage(
@@ -22,7 +46,22 @@ ui <- fluidPage(
                    'alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png">',
                '</a>',sep=""))
   ),
-  mainPanel(
+  tags$head(tags$style(type="text/css", "
+             #loadmessage {
+               position:relative;
+               top: 100px;
+               left: 0px;
+               width: 100%;
+               padding: 5px 0px 5px 0px;
+               text-align: center;
+               font-size: 100%;
+               color: #000000;
+               background-color: #CCFF66;
+               z-index: 105;
+             }
+          ")),
+  conditionalPanel(condition="$('html').hasClass('shiny-busy')",
+                   tags$div("Loading...",id="loadmessage")),
     tabsetPanel(type = "tabs", id="tabs",
                 tabPanel("All Columns", value=1,
                          verbatimTextOutput("all_columns")),
@@ -40,21 +79,22 @@ ui <- fluidPage(
                     selectizeInput(inputId = "Quality", label ="Quality", choices = unique(data$Quality), selected = unique(data$Quality), multiple = TRUE, options = NULL),
                     selectizeInput(inputId = "Cell", label ="Cell", choices = unique(data$Cell), selected = unique(data$Cell), multiple = TRUE, options = NULL),
                     selectizeInput(inputId = "Sex", label ="Sex", choices = unique(data$Sex), selected = unique(data$Sex), multiple = TRUE, options = NULL),
-                    selectizeInput(inputId = "Disease", label ="Disease", choices = unique(data$Disease), selected = unique(data$Disease), multiple = TRUE, options = NULL)
-                    , #uiOutput("sidebar_lutter")
+                    selectizeInput(inputId = "Disease", label ="Disease", choices = unique(data$Disease), selected = unique(data$Disease), multiple = TRUE, options = NULL),
                     radioButtons(inputId = "Fill",
                      label = "Fill by:",
                      choices = colnames(data)[-which(colnames(data) %in% c("Heterozygous.SNP","Homozygous.SNP"))],
                      selected = "Disease") 
                   ),
-                  plotlyOutput("homoBarPlot"),
-                  plotlyOutput("heteroBarPlot")
+                  mainPanel(
+                    plotlyOutput("homoBarPlot"),
+                    plotlyOutput("heteroBarPlot")
+                  )
                 ),
                 tabPanel("Raw", value=5,
                   verbatimTextOutput("Raw"),
                   DT::dataTableOutput('ex1'))
     )
-  )
+  
 )
 
 # Define server logic
@@ -66,6 +106,7 @@ server <- function(input, output) {
       }
     }
   })
+
   output$sidebar_summary <- renderUI({
     if (input$tabs == 2){
       radioButtons(inputId = "column",
@@ -73,9 +114,11 @@ server <- function(input, output) {
                    choices = colnames(data)[1:9])
     }
   })
+
   output$summary <- renderPrint({
     summary(data[input$column])
   })
+
   output$sidebar_unique <- renderUI({
     if(input$tabs == 3){
       radioButtons(inputId = "column2",
@@ -83,30 +126,13 @@ server <- function(input, output) {
                    choices = colnames(data))
     }
   })
+
   output$unique <- renderPrint({
     unique(data[input$column2])
   })
-  output$sidebar_lutter <- renderUI({
-    if (input$tabs == 4){
-    }
-  })
+
   output$homoBarPlot <- renderPlotly({
     if (input$tabs == 4){
-      print("Orrganism")
-      print(input$Organism)
-      print("OrganismPart")
-      print(input$OrganismPart)
-      print("input$Individual")
-      print(input$Individual)
-      print("input$Quality")
-      print(input$Quality)
-      print("input$Cell")
-      print(input$Cell)
-      print("input$Sex")
-      print(input$Sex)
-      print("input$Disease")
-      print(input$Disease)
-      print(str(data))
       data2 <- data %>% filter(Organism %in% as.character(input$Organism) & 
                OrganismPart %in% as.character(input$OrganismPart) &
                Individual %in% as.character(input$Individual) & 
@@ -114,13 +140,13 @@ server <- function(input, output) {
                Cell %in% as.character(input$Cell) & 
                Sex %in% as.character(input$Sex) &
                Disease %in% as.character(input$Disease)) %>% select(-Heterozygous.SNP)
-      print(str(data2))
       data3 <- separate_rows(data2, Homozygous.SNP) %>% filter(Homozygous.SNP!="")
       p <- ggplot(data3, aes(Homozygous.SNP)) + geom_bar(aes_string(fill=input$Fill))
       py <- ggplotly(p)
       py
     }
   })
+
   output$heteroBarPlot <- renderPlotly({
     if (input$tabs == 4) {
       data2 <- data %>% filter(Organism %in% as.character(input$Organism) &
@@ -136,29 +162,11 @@ server <- function(input, output) {
       py
     }
   })
+
   output$Raw <- renderPrint({
     if(input$tabs == 5){
-      for (i in 1:length(data$Heterozygous.SNP)){
-        if(length(data$Heterozygous.SNP[[i]][[1]]) == 0){
-            data$Heterozygous.SNP[[i]][[1]] = 'NA'
-        } else if(length(data$Heterozygous.SNP[[i]][[1]]) != 0) {
-          for (j in 1:length(data$Heterozygous.SNP[[i]][[1]])){
-            data$Heterozygous.SNP[[i]][[1]][j] = paste0('<a href=\"https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=',data$Heterozygous.SNP[[i]][[1]][j],'\">',data$Heterozygous.SNP[[i]][[1]][j],'</a>')
-          }
-        }
-        if(length(data$Homozygous.SNP[[i]][[1]]) == 0){
-          data$Homozygous.SNP[[i]][[1]] = 'NA'
-        } else if(length(data$Homozygous.SNP[[i]][[1]]) != 0) {
-          for (j in 1:length(data$Homozygous.SNP[[i]][[1]])){
-            data$Homozygous.SNP[[i]][[1]][j] = paste0('<a href=\"https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=',data$Homozygous.SNP[[i]][[1]][j],'\">',data$Homozygous.SNP[[i]][[1]][j],'</a>')
-          }
-        }
-        data$Heterozygous.SNP[i] = paste(unlist(data$Heterozygous.SNP[i][1]), collapse=',')
-        data$Homozygous.SNP[i] = paste(unlist(data$Homozygous.SNP[i][1]), collapse=',')        
-      }
-      data$Heterozygous.SNP = unlist(data$Heterozygous.SNP)
-      data$Homozygous.SNP = unlist(data$Homozygous.SNP)
-      output$ex1 <- DT::renderDataTable(DT::datatable(data, escape = FALSE, options = list(pageLength = 10)))
+      
+      output$ex1 <- DT::renderDataTable(DT::datatable(data_table, filter = 'top',escape = FALSE, options = list(pageLength = 10, scrollX='500px',autoWidth = TRUE)))
     }
   })
 }
