@@ -24,7 +24,7 @@ Variant Report Generator (ViRGo) is a reporting and variant browser tools that a
     * ggplot2
     * plotly
     * dplyr
-
+    * DT
 ## Presentation
 * [1/22 two page slides](./presentation/Presentation_012218.pptx)
 * [1/23 four page slides](https://docs.google.com/presentation/d/1YjBH5frG3v0PLQ3x3KwyDh3pNva85L7tBzYqLTyb7h0/edit#slide=id.p)
