@@ -40,7 +40,10 @@ ui <- fluidPage(
                   ),
                   plotlyOutput("homoBarPlot"),
                   plotlyOutput("heteroBarPlot")
-                )
+                ),
+                tabPanel("Raw", value=5,
+                  verbatimTextOutput("Raw"),
+                  DT::dataTableOutput('ex1'))
     )
   )
 )
@@ -133,6 +136,11 @@ server <- function(input, output) {
       p <- ggplot(data3, aes(Heterozygous.SNP)) + geom_bar(aes_string(fill=input$Fill))
       py <- ggplotly(p)
       py
+    }
+  })
+  output$Raw <- renderPrint({
+    if(input$tabs == 5){
+      output$ex1 <- DT::renderDataTable(DT::datatable(data, options = list(pageLength = 10)))
     }
   })
 }
