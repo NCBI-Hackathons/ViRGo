@@ -62,7 +62,6 @@ ui <- fluidPage(
           ")),
   conditionalPanel(condition="$('html').hasClass('shiny-busy')",
                    tags$div("Loading...",id="loadmessage")),
-  mainPanel(
     tabsetPanel(type = "tabs", id="tabs",
                 tabPanel("All Columns", value=1,
                          verbatimTextOutput("all_columns")),
@@ -86,14 +85,16 @@ ui <- fluidPage(
                      choices = colnames(data)[-which(colnames(data) %in% c("Heterozygous.SNP","Homozygous.SNP"))],
                      selected = "Disease") 
                   ),
-                  plotlyOutput("homoBarPlot"),
-                  plotlyOutput("heteroBarPlot")
+                  mainPanel(
+                    plotlyOutput("homoBarPlot"),
+                    plotlyOutput("heteroBarPlot")
+                  )
                 ),
                 tabPanel("Raw", value=5,
                   verbatimTextOutput("Raw"),
                   DT::dataTableOutput('ex1'))
     )
-  )
+  
 )
 
 # Define server logic
