@@ -30,7 +30,7 @@ add.samp.meta <- data.frame(add.samp.meta, 'name' = rownames(add.samp.meta))
 
 # Read in diabetes.data file
 ```{r}
-diabetes.data <- read.csv("new_diabetes_and_cftr.csv")
+diabetes.data <- read.csv("diabetes.csv")
 ```
 
 # Check merging columns on SRA are identical 
