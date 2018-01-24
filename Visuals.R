@@ -7,6 +7,30 @@ library(dplyr)
 
 # Load data
 data <- readRDS("m1_sub.Rds")
+data_table <- data
+# processing datatable data
+for (i in 1:length(data_table$Heterozygous.SNP)){
+  if(length(data_table$Heterozygous.SNP[[i]][[1]]) == 0){
+    data_table$Heterozygous.SNP[[i]][[1]] = 'NA'
+  } else if(length(data_table$Heterozygous.SNP[[i]][[1]]) != 0) {
+    for (j in 1:length(data_table$Heterozygous.SNP[[i]][[1]])){
+      data_table$Heterozygous.SNP[[i]][[1]][j] = paste0('<a href=\"https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=',data_table$Heterozygous.SNP[[i]][[1]][j],'\">',data$Heterozygous.SNP[[i]][[1]][j],'</a>')
+    }
+  }
+  if(length(data_table$Homozygous.SNP[[i]][[1]]) == 0){
+    data_table$Homozygous.SNP[[i]][[1]] = 'NA'
+  } else if(length(data_table$Homozygous.SNP[[i]][[1]]) != 0) {
+    for (j in 1:length(data_table$Homozygous.SNP[[i]][[1]])){
+      data_table$Homozygous.SNP[[i]][[1]][j] = paste0('<a href=\"https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=',data_table$Homozygous.SNP[[i]][[1]][j],'\">',data$Homozygous.SNP[[i]][[1]][j],'</a>')
+    }
+  }
+
+  data_table$Heterozygous.SNP[i] = paste(unlist(data_table$Heterozygous.SNP[i][1]), collapse=',')
+  data_table$Homozygous.SNP[i] = paste(unlist(data_table$Homozygous.SNP[i][1]), collapse=',')
+
+}
+data_table$Heterozygous.SNP = unlist(data_table$Heterozygous.SNP)
+data_table$Homozygous.SNP = unlist(data_table$Homozygous.SNP)
 
 # Define UI
 ui <- fluidPage(
@@ -22,6 +46,22 @@ ui <- fluidPage(
                    'alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png">',
                '</a>',sep=""))
   ),
+  tags$head(tags$style(type="text/css", "
+             #loadmessage {
+               position:relative;
+               top: 100px;
+               left: 0px;
+               width: 100%;
+               padding: 5px 0px 5px 0px;
+               text-align: center;
+               font-size: 100%;
+               color: #000000;
+               background-color: #CCFF66;
+               z-index: 105;
+             }
+          ")),
+  conditionalPanel(condition="$('html').hasClass('shiny-busy')",
+                   tags$div("Loading...",id="loadmessage")),
   mainPanel(
     tabsetPanel(type = "tabs", id="tabs",
                 tabPanel("All Columns", value=1,
@@ -138,27 +178,8 @@ server <- function(input, output) {
   })
   output$Raw <- renderPrint({
     if(input$tabs == 5){
-      for (i in 1:length(data$Heterozygous.SNP)){
-        if(length(data$Heterozygous.SNP[[i]][[1]]) == 0){
-            data$Heterozygous.SNP[[i]][[1]] = 'NA'
-        } else if(length(data$Heterozygous.SNP[[i]][[1]]) != 0) {
-          for (j in 1:length(data$Heterozygous.SNP[[i]][[1]])){
-            data$Heterozygous.SNP[[i]][[1]][j] = paste0('<a href=\"https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=',data$Heterozygous.SNP[[i]][[1]][j],'\">',data$Heterozygous.SNP[[i]][[1]][j],'</a>')
-          }
-        }
-        if(length(data$Homozygous.SNP[[i]][[1]]) == 0){
-          data$Homozygous.SNP[[i]][[1]] = 'NA'
-        } else if(length(data$Homozygous.SNP[[i]][[1]]) != 0) {
-          for (j in 1:length(data$Homozygous.SNP[[i]][[1]])){
-            data$Homozygous.SNP[[i]][[1]][j] = paste0('<a href=\"https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=',data$Homozygous.SNP[[i]][[1]][j],'\">',data$Homozygous.SNP[[i]][[1]][j],'</a>')
-          }
-        }
-        data$Heterozygous.SNP[i] = paste(unlist(data$Heterozygous.SNP[i][1]), collapse=',')
-        data$Homozygous.SNP[i] = paste(unlist(data$Homozygous.SNP[i][1]), collapse=',')        
-      }
-      data$Heterozygous.SNP = unlist(data$Heterozygous.SNP)
-      data$Homozygous.SNP = unlist(data$Homozygous.SNP)
-      output$ex1 <- DT::renderDataTable(DT::datatable(data, escape = FALSE, options = list(pageLength = 10)))
+      
+      output$ex1 <- DT::renderDataTable(DT::datatable(data_table, filter = 'top',escape = FALSE, options = list(pageLength = 10, scrollX='500px',autoWidth = TRUE)))
     }
   })
 }
