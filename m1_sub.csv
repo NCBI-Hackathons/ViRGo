@@ -1,4 +1,4 @@
-"","Organism","Organism part","Individual","Quality","Cell","Sex","Age","BMI","Disease","Heterozygous.SNP","Homozygous.SNP"
+"","Organism","OrganismPart","Individual","Quality","Cell","Sex","Age","BMI","Disease","Heterozygous.SNP","Homozygous.SNP"
 "1","Homo sapiens","pancreas","AZ","low quality cell","not applicable","male","43","30.8","normal","",""
 "2","Homo sapiens","pancreas","AZ","OK","delta cell","male","43","30.8","normal","","10229820;73715573;886044712"
 "3","Homo sapiens","pancreas","AZ","OK","alpha cell","male","43","30.8","normal","","10229820;886044712;73715573"

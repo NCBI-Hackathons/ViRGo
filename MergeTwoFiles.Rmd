@@ -47,7 +47,7 @@ saveRDS(m1,"m1.Rds")
 # Take subset of columns from merged data frame
 ```{r}
 m1_sub <- m1 %>% select(Characteristics.organism., Characteristics.organism.part., Characteristics.individual., Characteristics.single.cell.well.quality., Factor.Value.cell.type., Characteristics.sex., Characteristics.age., Characteristics.body.mass.index., Factor.Value.disease., Heterozygous.SNPs, Homozygous.SNPs)
-colnames(m1_sub) <- c("Organism", "Organism part", "Individual", "Quality", "Cell", "Sex", "Age", "BMI", "Disease", "Heterozygous.SNP", "Homozygous.SNP")
+colnames(m1_sub) <- c("Organism", "OrganismPart", "Individual", "Quality", "Cell", "Sex", "Age", "BMI", "Disease", "Heterozygous.SNP", "Homozygous.SNP")
 write.csv(m1_sub, "m1_sub.csv")
 ```
 

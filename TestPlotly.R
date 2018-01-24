@@ -5,7 +5,7 @@ datFullHomo <- m1_sub %>% select(Homozygous.SNP)
 table(unlist(datFullHomo)) # 175 unique homozygous (5053 total)
 
 datFullHet <- m1_sub %>% select(Heterozygous.SNP)
-table(unlist(datFullHet)) # 25 unique homozygous (299 total)
+table(unlist(datFullHet)) # 25 unique heterozygous (299 total)
 
 uniqHomo <- unique(unlist(datFullHomo))
 uniqHet <- unique(unlist(datFullHet))
