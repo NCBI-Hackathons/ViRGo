@@ -17,14 +17,14 @@ for (i in 1:length(data_table$Heterozygous.SNP)){
     data_table$Heterozygous.SNP[[i]][[1]] = 'NA'
   } else if(length(data_table$Heterozygous.SNP[[i]][[1]]) != 0) {
     for (j in 1:length(data_table$Heterozygous.SNP[[i]][[1]])){
-      data_table$Heterozygous.SNP[[i]][[1]][j] = paste0('<a href=\"https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=',data_table$Heterozygous.SNP[[i]][[1]][j],'\">',data$Heterozygous.SNP[[i]][[1]][j],'</a>')
+      data_table$Heterozygous.SNP[[i]][[1]][j] = paste0('<a href=\"https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=',data_table$Heterozygous.SNP[[i]][[1]][j],'\">',data_table$Heterozygous.SNP[[i]][[1]][j],'</a>')
     }
   }
   if(length(data_table$Homozygous.SNP[[i]][[1]]) == 0){
     data_table$Homozygous.SNP[[i]][[1]] = 'NA'
   } else if(length(data_table$Homozygous.SNP[[i]][[1]]) != 0) {
     for (j in 1:length(data_table$Homozygous.SNP[[i]][[1]])){
-      data_table$Homozygous.SNP[[i]][[1]][j] = paste0('<a href=\"https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=',data_table$Homozygous.SNP[[i]][[1]][j],'\">',data$Homozygous.SNP[[i]][[1]][j],'</a>')
+      data_table$Homozygous.SNP[[i]][[1]][j] = paste0('<a href=\"https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=',data_table$Homozygous.SNP[[i]][[1]][j],'\">',data_table$Homozygous.SNP[[i]][[1]][j],'</a>')
     }
   }
 
