@@ -140,7 +140,27 @@ server <- function(input, output) {
   })
   output$Raw <- renderPrint({
     if(input$tabs == 5){
-      output$ex1 <- DT::renderDataTable(DT::datatable(data, options = list(pageLength = 10)))
+      for (i in 1:length(data$Heterozygous.SNP)){
+        if(length(data$Heterozygous.SNP[[i]][[1]]) == 0){
+            data$Heterozygous.SNP[[i]][[1]] = 'NA'
+        } else if(length(data$Heterozygous.SNP[[i]][[1]]) != 0) {
+          for (j in 1:length(data$Heterozygous.SNP[[i]][[1]])){
+            data$Heterozygous.SNP[[i]][[1]][j] = paste0('<a href=\"https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=',data$Heterozygous.SNP[[i]][[1]][j],'\">',data$Heterozygous.SNP[[i]][[1]][j],'</a>')
+          }
+        }
+        if(length(data$Homozygous.SNP[[i]][[1]]) == 0){
+          data$Homozygous.SNP[[i]][[1]] = 'NA'
+        } else if(length(data$Homozygous.SNP[[i]][[1]]) != 0) {
+          for (j in 1:length(data$Homozygous.SNP[[i]][[1]])){
+            data$Homozygous.SNP[[i]][[1]][j] = paste0('<a href=\"https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=',data$Homozygous.SNP[[i]][[1]][j],'\">',data$Homozygous.SNP[[i]][[1]][j],'</a>')
+          }
+        }
+        data$Heterozygous.SNP[i] = paste(unlist(data$Heterozygous.SNP[i][1]), collapse=',')
+        data$Homozygous.SNP[i] = paste(unlist(data$Homozygous.SNP[i][1]), collapse=',')        
+      }
+      data$Heterozygous.SNP = unlist(data$Heterozygous.SNP)
+      data$Homozygous.SNP = unlist(data$Homozygous.SNP)
+      output$ex1 <- DT::renderDataTable(DT::datatable(data, escape = FALSE, options = list(pageLength = 10)))
     }
   })
 }
