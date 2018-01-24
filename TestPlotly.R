@@ -14,23 +14,13 @@ uniqHet <- unique(unlist(datFullHet))
 intersect(uniqHomo, uniqHet)
 
 
+###########################
 
 m1_sub <- readRDS("m1_sub.Rds")
-dat <- m1_sub %>% filter(Cell=="acinar cell") %>% select(Homozygous.SNP, Disease)
+dat <- m1_sub %>% filter(Individual=="AZ" & Cell %in% c("alpha cell", "beta cell", "gamma cell")) %>% select(-Heterozygous.SNP, Disease)
 
-dat2 <- separate_rows(dat, Homozygous.SNP)
+dat2 <- separate_rows(dat, Homozygous.SNP) %>% filter(Homozygous.SNP!="")
 
-# Remove rows with no SNP information
-dat2 <- dat2 %>% filter(Homozygous.SNP!="")
-
-#dat2 <- as.data.frame(table(unlist(dat)))
-#dat2 <- dat2 %>% arrange(desc(Freq))
-#colnames(dat2) <- c("SNP", "Freq")
-
-# Plot it out
-# p <- ggplot(data = dat2, aes(x = reorder(Homozygous.SNP, -Freq), y=Freq), fill=Disease) + geom_bar(stat="identity") + labs(x = "SNP") # Can do fill=variable
-
-
-p <- ggplot(dat2, aes(Homozygous.SNP)) + geom_bar(aes(fill=Disease)) #works
+p <- ggplot(dat2, aes(Homozygous.SNP)) + geom_bar(aes(fill=Cell)) #works
 
 ggplotly(p)
