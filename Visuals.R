@@ -132,21 +132,6 @@ server <- function(input, output) {
   })
   output$homoBarPlot <- renderPlotly({
     if (input$tabs == 4){
-      print("Orrganism")
-      print(input$Organism)
-      print("OrganismPart")
-      print(input$OrganismPart)
-      print("input$Individual")
-      print(input$Individual)
-      print("input$Quality")
-      print(input$Quality)
-      print("input$Cell")
-      print(input$Cell)
-      print("input$Sex")
-      print(input$Sex)
-      print("input$Disease")
-      print(input$Disease)
-      print(str(data))
       data2 <- data %>% filter(Organism %in% as.character(input$Organism) & 
                OrganismPart %in% as.character(input$OrganismPart) &
                Individual %in% as.character(input$Individual) & 
@@ -154,7 +139,6 @@ server <- function(input, output) {
                Cell %in% as.character(input$Cell) & 
                Sex %in% as.character(input$Sex) &
                Disease %in% as.character(input$Disease)) %>% select(-Heterozygous.SNP)
-      print(str(data2))
       data3 <- separate_rows(data2, Homozygous.SNP) %>% filter(Homozygous.SNP!="")
       p <- ggplot(data3, aes(Homozygous.SNP)) + geom_bar(aes_string(fill=input$Fill))
       py <- ggplotly(p)
