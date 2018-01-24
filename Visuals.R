@@ -10,12 +10,17 @@ data <- readRDS("m1_sub.Rds")
 
 # Define UI
 ui <- fluidPage(
-  
   # App title
-  titlePanel("SCRVV"),
+  tags$h1("SCRVV", align="center"),
   # Banner links to our github repo
   tags$div(
-    HTML('<a href="https://github.com/NCBI-Hackathons/SCRVV/"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>')
+    HTML(paste('<a href="https://github.com/NCBI-Hackathons/SCRVV/">',
+                 '<img style="position: absolute; top: 0; right: 0; border: 0;"',
+                   'src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/',
+                      '68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e73',
+                      '2f666f726b6d655f72696768745f7265645f6161303030302e706e67" ',
+                   'alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png">',
+               '</a>',sep=""))
   ),
   mainPanel(
     tabsetPanel(type = "tabs", id="tabs",
@@ -83,17 +88,6 @@ server <- function(input, output) {
   })
   output$sidebar_lutter <- renderUI({
     if (input$tabs == 4){
-      # selectizeInput(inputId = "Organism", label ="Organism", choices = unique(data$Organism), selected = unique(data$Organism), multiple = TRUE, options = NULL)
-      # selectizeInput(inputId = "OrganismPart", label ="Organism Part", choices = unique(data$OrganismPart), selected = unique(data$OrganismPart), multiple = TRUE, options = NULL)
-      # selectizeInput(inputId = "Individual", label ="Individual", choices = unique(data$Individual), selected = unique(data$Individual), multiple = TRUE, options = NULL)
-      # selectizeInput(inputId = "Quality", label ="Quality", choices = unique(data$Quality), selected = unique(data$Quality), multiple = TRUE, options = NULL)
-      # selectizeInput(inputId = "Cell", label ="Cell", choices = unique(data$Cell), selected = unique(data$Cell), multiple = TRUE, options = NULL)
-      # selectizeInput(inputId = "Sex", label ="Sex", choices = unique(data$Sex), selected = unique(data$Sex), multiple = TRUE, options = NULL)
-      # selectizeInput(inputId = "Disease", label ="Disease", choices = unique(data$Disease), selected = unique(data$Disease), multiple = TRUE, options = NULL)
-      # radioButtons(inputId = "Fill",
-      #              label = "Fill by:",
-      #              choices = colnames(data)[-which(colnames(data) %in% c("Heterozygous.SNP","Homozygous.SNP"))],
-      #              selected = "Disease") 
     }
   })
   output$homoBarPlot <- renderPlotly({
