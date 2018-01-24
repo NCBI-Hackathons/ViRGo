@@ -35,4 +35,4 @@ Variant Report Generator (ViRGo) is a reporting and variant browser tools that a
 * [E-MTAB-5061.sdrf.txt](E-MTAB-5061.sdrf.txt) is from [ArrayExpress](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-5061/).
 * Based on output files of a [customized version](https://github.com/hsiaoyi0504/SC3) of [SC3](https://github.com/NCBI-Hackathons/SC3), which is a product of previous NCBI Hackathon.
 * [collect_output.py](collect_output.py) is for merging files generated from [SC3]((https://github.com/hsiaoyi0504/SC3)).
-* [m1.Rds](m1.Rds) is file genreated by [MergeTwoFiles.Rmd](MergeTwoFiles.Rmd)
+* [m1_sub.Rds](m1_sub.Rds), [m1.Rds](m1.Rds) is file genreated by [MergeTwoFiles.Rmd](MergeTwoFiles.Rmd)
