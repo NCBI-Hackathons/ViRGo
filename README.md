@@ -12,7 +12,7 @@ Variant Report Generator (ViRGo) is a  reporting and variant browser tools that 
 1. Download this repo: `git clone https://github.com/NCBI-Hackathons/<this software>.git`
 2. Collecting output files generated beforehand: `python3 collect_output.py`
 3. Follow the steps in [MergeTwoFiles.Rmd](MergeTwoFiles.Rmd) to generate the [m1.Rds](m1.Rds)
-4. run [app.R](app.R)  
+4. run [Visualize.R](Visualize.R)  
   
 ## Presentation
 * [1/22 two page slides](./presentation/Presentation_012218.pptx)
