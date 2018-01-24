@@ -14,8 +14,8 @@ out = 'Disease State,SRA,Heterozygous SNPs,Homozygous SNPs\n'
 for sra in sra_accessions:
     with open(path.join(current_path, 'SC3', 'test', 'out', sra, 'results.tsv')) as f:
         for line in islice(f, 1, None):
-            temp = sra_accessions[sra] + line.split('\t')
-            out += ','.join(line)
+            temp = [sra_accessions[sra]] + line.split('\t')
+            out += ','.join(temp)
 
-with open(path.join(current_path, 'test.csv'), 'w') as fout:
+with open(path.join(current_path, 'diabetes.csv'), 'w') as fout:
     fout.write(out)
