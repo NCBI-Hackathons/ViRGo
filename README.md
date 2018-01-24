@@ -14,7 +14,17 @@ Variant Report Generator (ViRGo) is a  reporting and variant browser tools that 
 2. Collecting output files generated beforehand: `python3 collect_output.py`
 3. Follow the steps in [MergeTwoFiles.Rmd](MergeTwoFiles.Rmd) to generate the [m1.Rds](m1.Rds)
 4. run [Visualize.R](Visualize.R)  
-  
+
+## Dependencies
+* Python 3
+* R
+  * packages:
+    * shiny
+    * tidyr
+    * ggplot2
+    * plotly
+    * dplyr
+
 ## Presentation
 * [1/22 two page slides](./presentation/Presentation_012218.pptx)
 * [1/23 four page slides](https://docs.google.com/presentation/d/1YjBH5frG3v0PLQ3x3KwyDh3pNva85L7tBzYqLTyb7h0/edit#slide=id.p)
