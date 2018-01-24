@@ -8,6 +8,9 @@ library(dplyr)
 # Load data
 data <- readRDS("m1_sub.Rds")
 data_table <- data
+
+data_table$Homozygous.SNP <- lapply(data_table$Homozygous.SNP, function(x){strsplit((as.character(x)), ";")})
+data_table$Heterozygous.SNP <- lapply(data_table$Heterozygous.SNP, function(x){strsplit((as.character(x)), ";")})
 # processing datatable data
 for (i in 1:length(data_table$Heterozygous.SNP)){
   if(length(data_table$Heterozygous.SNP[[i]][[1]]) == 0){
@@ -71,7 +74,7 @@ ui <- fluidPage(
                 tabPanel("Unique", value=3,
                   sidebarPanel(uiOutput("sidebar_unique")),
                   verbatimTextOutput("unique")),
-                tabPanel("Lutter", value=4,
+                tabPanel("SNP Count Visualization", value=4,
                   sidebarPanel(
                     selectizeInput(inputId = "Organism", label ="Organism", choices = unique(data$Organism), selected = unique(data$Organism), multiple = TRUE, options = NULL),
                     selectizeInput(inputId = "OrganismPart", label ="Organism Part", choices = unique(data$OrganismPart), selected = unique(data$OrganismPart), multiple = TRUE, options = NULL),
@@ -90,7 +93,7 @@ ui <- fluidPage(
                     plotlyOutput("heteroBarPlot")
                   )
                 ),
-                tabPanel("Raw", value=5,
+                tabPanel("See Whole Data Table", value=5,
                   verbatimTextOutput("Raw"),
                   DT::dataTableOutput('ex1'))
     )
