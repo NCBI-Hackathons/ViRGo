@@ -178,7 +178,10 @@ server <- function(input, output) {
 
   output$download <- renderUI({
     if(input$tabs == 6){
-      tags$div(HTML('<a href="https://raw.githubusercontent.com/NCBI-Hackathons/ViRGo/master/diabetes.csv">Diabetes</a>'))
+      tags$div(tags$h1('Downloads'),
+               tags$ul(
+                 tags$li(
+                 HTML('CSV file summarizes the single cell RNA-seq study of healthy and diabetes donors <a href="https://raw.githubusercontent.com/NCBI-Hackathons/ViRGo/master/diabetes.csv">Link</a>'))))
     }
   })
 
