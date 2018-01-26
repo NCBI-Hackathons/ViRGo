@@ -9,6 +9,11 @@ library(dplyr)
 data <- readRDS("m1_sub.Rds")
 data_table <- data
 
+# Check that input data frame fits the required format. If not, give user Error message and close app.
+validate(
+  need(all(c("Organism", "OrganismPart", "Individual", "Quality", "Cell", "Sex", "Disease", "Heterozygous.SNP", "Homozygous.SNP") %in% colnames(data_table)), "This Shiny application will not run because your inputted data frame does not contain the necessary column names. Your data frame should contain at least nine column names exactly as follows: 'Organism', 'OrganismPart', 'Individual', 'Quality', 'Cell', 'Sex', 'Disease', 'Heterozygous.SNP', 'Homozygous.SNP'")
+)
+
 data_table$Homozygous.SNP <- lapply(data_table$Homozygous.SNP, function(x){strsplit((as.character(x)), ";")})
 data_table$Heterozygous.SNP <- lapply(data_table$Heterozygous.SNP, function(x){strsplit((as.character(x)), ";")})
 # processing datatable data
@@ -40,7 +45,7 @@ ui <- fluidPage(
   # App title
   tags$h1("ViRGo: Variant Report Generator", align="center"),
   tags$head(
-    tags$style(HTML("hr {border-top: 1px solid #000000;}"))
+    tags$style(HTML("hr {border-top: 1px solid #545050;}"))
   ),
   # Banner links to our github repo
   tags$div(
