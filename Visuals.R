@@ -181,7 +181,6 @@ server <- function(input, output) {
     validate(
       need(nrow(data2)>0, 'There are no Homozygous SNPs that meet the values in the selected fields.')
     )
-    # data3homo <- separate_rows(data2, Homozygous.SNP) %>% filter(Homozygous.SNP!="")
     data3homo <- separate_rows(data2, Homozygous.SNP) %>% filter(Homozygous.SNP!="")
     validate(
       need(nrow(data3homo)>0, 'There are no Homozygous SNPs that meet the values in the selected fields.')
@@ -200,7 +199,6 @@ server <- function(input, output) {
     validate(
       need(nrow(data2)>0, 'There are no Heterozygous SNPs that meet the values in the selected fields.')
     )
-    # data3hetero <- separate_rows(data2, Heterozygous.SNP) %>% filter(Heterozygous.SNP!="")
     data3hetero <- separate_rows(data2, Heterozygous.SNP) %>% filter(Heterozygous.SNP!="")
     validate(
       need(nrow(data3hetero)>0, 'There are no Heterozygous SNPs that meet the values in the selected fields.')
