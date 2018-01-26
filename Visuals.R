@@ -39,6 +39,9 @@ data_table$Homozygous.SNP = unlist(data_table$Homozygous.SNP)
 ui <- fluidPage(
   # App title
   tags$h1("ViRGo: Variant Report Generator", align="center"),
+  tags$head(
+    tags$style(HTML("hr {border-top: 1px solid #000000;}"))
+  ),
   # Banner links to our github repo
   tags$div(
     HTML(paste('<a href="https://github.com/NCBI-Hackathons/ViRGo">',
@@ -83,8 +86,10 @@ ui <- fluidPage(
                     selectizeInput(inputId = "Cell", label ="Cell", choices = unique(data$Cell), selected = unique(data$Cell), multiple = TRUE, options = NULL),
                     selectizeInput(inputId = "Sex", label ="Sex", choices = unique(data$Sex), selected = unique(data$Sex), multiple = TRUE, options = NULL),
                     selectizeInput(inputId = "Disease", label ="Disease", choices = unique(data$Disease), selected = unique(data$Disease), multiple = TRUE, options = NULL),
+                    
+                    hr(),
                     radioButtons(inputId = "Fill",
-                     label = "Fill by:",
+                     label = "Fill by",
                      choices = colnames(data)[-which(colnames(data) %in% c("Heterozygous.SNP","Homozygous.SNP"))],
                      selected = "Disease") 
                   ),
