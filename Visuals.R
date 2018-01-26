@@ -85,6 +85,7 @@ ui <- fluidPage(
                 tabPanel("SNP Count Visualization", value=4,
                   sidebarPanel(
                     selectizeInput(inputId = "Organism", label ="Organism", choices = unique(data$Organism), selected = unique(data$Organism), multiple = TRUE, options = NULL),
+
                     selectizeInput(inputId = "OrganismPart", label ="Organism Part", choices = unique(data$OrganismPart), selected = unique(data$OrganismPart), multiple = TRUE, options = NULL),
                     selectizeInput(inputId = "Individual", label ="Individual", choices = unique(data$Individual), selected = unique(data$Individual), multiple = TRUE, options = NULL),
                     selectizeInput(inputId = "Quality", label ="Quality", choices = unique(data$Quality), selected = unique(data$Quality), multiple = TRUE, options = NULL),
@@ -115,6 +116,56 @@ ui <- fluidPage(
 
 # Define server logic
 server <- function(input, output) {
+  
+  Organism <- reactive({
+    validate(
+      need(input$Organism != "", 'Please choose at least value in the Organism field.')
+    )
+    input$Organism
+  })
+  
+  OrganismPart <- reactive({
+    validate(
+      need(input$OrganismPart != "", 'Please choose at least one value in the OrganismPart field.')
+    )
+    input$OrganismPart
+  })
+  
+  Individual <- reactive({
+    validate(
+      need(input$Individual != "", 'Please choose at least one value in the Individual field.')
+    )
+    input$Individual
+  })
+  
+  Quality <- reactive({
+    validate(
+      need(input$Quality != "", 'Please choose at least one value in the Quality field.')
+    )
+    input$Quality
+  })
+  
+  Cell <- reactive({
+    validate(
+      need(input$Cell != "", 'Please choose at least one value in the Cell field.')
+    )
+    input$Cell
+  })
+  
+  Sex <- reactive({
+    validate(
+      need(input$Sex != "", 'Please choose at least one value in the Sex field.')
+    )
+    input$Sex
+  })
+  
+  Disease <- reactive({
+    validate(
+      need(input$Disease != "", 'Please choose at least one value in the Disease field.')
+    )
+    input$Disease
+  })
+  
   output$all_columns <- renderPrint({
     if (input$tabs == 1){
       for (i in 1:11) {
@@ -149,13 +200,13 @@ server <- function(input, output) {
 
   output$homoBarPlot <- renderPlotly({
     if (input$tabs == 4){
-      data2 <- data %>% filter(Organism %in% as.character(input$Organism) & 
-               OrganismPart %in% as.character(input$OrganismPart) &
-               Individual %in% as.character(input$Individual) & 
-               Quality %in% as.character(input$Quality) & 
-               Cell %in% as.character(input$Cell) & 
-               Sex %in% as.character(input$Sex) &
-               Disease %in% as.character(input$Disease)) %>% select(-Heterozygous.SNP)
+      data2 <- data %>% filter(Organism %in% as.character(Organism()) & 
+               OrganismPart %in% as.character(OrganismPart()) &
+               Individual %in% as.character(Individual()) & 
+               Quality %in% as.character(Quality()) & 
+               Cell %in% as.character(Cell()) & 
+               Sex %in% as.character(Sex()) &
+               Disease %in% as.character(Disease())) %>% select(-Heterozygous.SNP)
       data3 <- separate_rows(data2, Homozygous.SNP) %>% filter(Homozygous.SNP!="")
       p <- ggplot(data3, aes(Homozygous.SNP)) + geom_bar(aes_string(fill=input$Fill))
       py <- ggplotly(p)
@@ -165,13 +216,13 @@ server <- function(input, output) {
 
   output$heteroBarPlot <- renderPlotly({
     if (input$tabs == 4) {
-      data2 <- data %>% filter(Organism %in% as.character(input$Organism) &
-               OrganismPart %in% as.character(input$OrganismPart) &
-               Individual %in% as.character(input$Individual) &
-               Quality %in% as.character(input$Quality) &
-               Cell %in% as.character(input$Cell) &
-               Sex %in% as.character(input$Sex) &
-               Disease %in% as.character(input$Disease)) %>% select(-Homozygous.SNP)
+      data2 <- data %>% filter(Organism %in% as.character(Organism()) &
+               OrganismPart %in% as.character(OrganismPart()) &
+               Individual %in% as.character(Individual()) &
+               Quality %in% as.character(Quality()) &
+               Cell %in% as.character(Cell()) &
+               Sex %in% as.character(Sex()) &
+               Disease %in% as.character(Disease())) %>% select(-Homozygous.SNP)
       data3 <- separate_rows(data2, Heterozygous.SNP) %>% filter(Heterozygous.SNP!="")
       p <- ggplot(data3, aes(Heterozygous.SNP)) + geom_bar(aes_string(fill=input$Fill))
       py <- ggplotly(p)
