@@ -166,7 +166,49 @@ server <- function(input, output) {
     input$Disease
   })
   
-  output$all_columns <- renderPrint({
+  
+  
+  
+  # Validate data frame has rows
+  data3homo <- reactive({
+    data2 <- data %>% filter(Organism %in% as.character(Organism()) & 
+                               OrganismPart %in% as.character(OrganismPart()) &
+                               Individual %in% as.character(Individual()) & 
+                               Quality %in% as.character(Quality()) & 
+                               Cell %in% as.character(Cell()) & 
+                               Sex %in% as.character(Sex()) &
+                               Disease %in% as.character(Disease())) %>% select(-Heterozygous.SNP)
+    validate(
+      need(nrow(data2)>0, 'There are no Homozygous SNPs that meet the values in the selected fields.')
+    )
+    # data3homo <- separate_rows(data2, Homozygous.SNP) %>% filter(Homozygous.SNP!="")
+    data3homo <- separate_rows(data2, Homozygous.SNP) %>% filter(Homozygous.SNP!="")
+    validate(
+      need(nrow(data3homo)>0, 'There are no Homozygous SNPs that meet the values in the selected fields.')
+    )
+    data3homo
+  })
+  
+  data3hetero <- reactive({
+    data2 <- data %>% filter(Organism %in% as.character(Organism()) & 
+                               OrganismPart %in% as.character(OrganismPart()) &
+                               Individual %in% as.character(Individual()) & 
+                               Quality %in% as.character(Quality()) & 
+                               Cell %in% as.character(Cell()) & 
+                               Sex %in% as.character(Sex()) &
+                               Disease %in% as.character(Disease())) %>% select(-Homozygous.SNP)
+    validate(
+      need(nrow(data2)>0, 'There are no Heterozygous SNPs that meet the values in the selected fields.')
+    )
+    # data3hetero <- separate_rows(data2, Heterozygous.SNP) %>% filter(Heterozygous.SNP!="")
+    data3hetero <- separate_rows(data2, Heterozygous.SNP) %>% filter(Heterozygous.SNP!="")
+    validate(
+      need(nrow(data3hetero)>0, 'There are no Heterozygous SNPs that meet the values in the selected fields.')
+    )
+    data3hetero
+  })
+  
+    output$all_columns <- renderPrint({
     if (input$tabs == 1){
       for (i in 1:11) {
         cat(colnames(data)[i], "\n")
@@ -200,15 +242,7 @@ server <- function(input, output) {
 
   output$homoBarPlot <- renderPlotly({
     if (input$tabs == 4){
-      data2 <- data %>% filter(Organism %in% as.character(Organism()) & 
-               OrganismPart %in% as.character(OrganismPart()) &
-               Individual %in% as.character(Individual()) & 
-               Quality %in% as.character(Quality()) & 
-               Cell %in% as.character(Cell()) & 
-               Sex %in% as.character(Sex()) &
-               Disease %in% as.character(Disease())) %>% select(-Heterozygous.SNP)
-      data3 <- separate_rows(data2, Homozygous.SNP) %>% filter(Homozygous.SNP!="")
-      p <- ggplot(data3, aes(Homozygous.SNP)) + geom_bar(aes_string(fill=input$Fill))
+      p <- ggplot(data3homo(), aes(Homozygous.SNP)) + geom_bar(aes_string(fill=input$Fill))
       py <- ggplotly(p)
       py
     }
@@ -216,15 +250,7 @@ server <- function(input, output) {
 
   output$heteroBarPlot <- renderPlotly({
     if (input$tabs == 4) {
-      data2 <- data %>% filter(Organism %in% as.character(Organism()) &
-               OrganismPart %in% as.character(OrganismPart()) &
-               Individual %in% as.character(Individual()) &
-               Quality %in% as.character(Quality()) &
-               Cell %in% as.character(Cell()) &
-               Sex %in% as.character(Sex()) &
-               Disease %in% as.character(Disease())) %>% select(-Homozygous.SNP)
-      data3 <- separate_rows(data2, Heterozygous.SNP) %>% filter(Heterozygous.SNP!="")
-      p <- ggplot(data3, aes(Heterozygous.SNP)) + geom_bar(aes_string(fill=input$Fill))
+      p <- ggplot(data3hetero(), aes(Heterozygous.SNP)) + geom_bar(aes_string(fill=input$Fill))
       py <- ggplotly(p)
       py
     }
