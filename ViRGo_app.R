@@ -6,7 +6,7 @@ library(ggplot2)
 library(dplyr)
 
 # Load data
-data <- readRDS("m1_sub.Rds")
+data <- readRDS("data/merged_sub.Rds")
 data_table <- data
 
 # Check that input data frame fits the required format. If not, give user Error message and close app.

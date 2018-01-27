@@ -1,21 +1,37 @@
 # ViRGo: Variant Report Generator 
 
-See our live demo from [here](https://hsiaoyi0504.shinyapps.io/virgo/) !
+View a live demonstration of our application [here](https://hsiaoyi0504.shinyapps.io/virgo/) !
 
 ## Introduction   
-This project is mainly based on combining result files generated from [SC3](https://github.com/NCBI-Hackathons/SC3), which is a previous product of NCBI Hackathons. SC3 is based on [PSST](https://github.com/NCBI-Hackathons/PSST), which also a product of previous NCBI Hackathon. SC3 takes bioproject and disease name as inputs and has the functionality to map each SRA experiment in that Bioproject to SNP information gathered from NCBI ClinVar. We implemented a customized version of [SC3](https://github.com/hsiaoyi0504/SC3) to make it operate normally on Ubuntu without SLURM workload manager. We map the single cell RNA-seq data (NCBI Bioproject accession, PRJEB15401 and EMBL-EBI ArrayExpress E-MTAB-5061) using SC3 to relate   
-  
+This project is mainly based on combining and then exploring output files generated from [SC3](https://github.com/NCBI-Hackathons/SC3), which is a previous product of the NCBI Hackathons. SC3 was built upon [PSST](https://github.com/NCBI-Hackathons/PSST), which was also developed in prior NCBI Hackathons. The two input parameters of SC3 are a [NCBI BioProject accession number](https://www.ncbi.nlm.nih.gov/bioproject/) and a gene or disease of interest. With this information, SC3 has the functionality to map each [SRA experiment](https://www.ncbi.nlm.nih.gov/sra) in that BioProject to the SNP information gathered from [NCBI ClinVar](https://www.ncbi.nlm.nih.gov/clinvar/). We implemented a customized version of [SC3](https://github.com/hsiaoyi0504/SC3) to allow it to operate on Ubuntu without the SLURM workload manager.
+
+In this project, we mapped the single cell RNA-sequencing data (NCBI BioProject accession PRJEB15401 and EMBL-EBI ArrayExpress E-MTAB-5061) using SC3. This [dataset](https://www.ncbi.nlm.nih.gov/bioproject/?term=PRJEB15401) consisted of transcription profiles of pancreatic tissues obtained from six healthy controls and four deceased donors with type 2 diabetes.
+
 ## What's the problem?
-A single individual can process up to 3M SNV and up to 3000 private SNV most of which are normal variants and are benign. Thus identifying the causal variant can be difficult.
-  
+Single nucleotide polymorphisms (SNPs) are the most frequent type of genetic variation among human beings. Each SNP designates a difference in a single DNA building block (nucleotide) and occurs on average in about one out of every 300 nucleotides. In other words, there are about 10 million SNPs in the human genome. These genetic differences sometimes mean that the instructions for protein generation are different, which can cause phenotypic biological variation. While most SNPs have no known effects on health, some have been found to be associated with disease. There is growing evidence that SNPs in a given individual can influence disease susceptibility and response to drugs and toxicities. As a result, research studies will continue to identify associations between SNPs and complex diseases such as cancer, heart disease, and diabetes. Given the largeness of the SNP information for each individual and the complexity of such diseases, it is difficult to elicit SNPs with causal influence on diseases. Generating open-source software that allows researchers to quickly and interactively view SNP information alongside variables of interest is one small approach toward solving this problem.
+
 ## What is ViRGo?
-Variant Report Generator (ViRGo) is a reporting and variant browser tools that aggregate information from an RNAseq variant calling pipeline and provide summary and statistics of attributes including individual/sample, phenotype, and variant information to aid in the assessment of biologically relevant variants. It's mainly built on top of an awesome R package [Shiny](https://shiny.rstudio.com/).
+Variant Report Generator (ViRGo) is a reporting and variant browser tool that aggregates information from an RNA-sequecing variant calling pipeline and provides summary and statistics of attributes including the following:
+
+- Organism (Example: Humans)
+- Organism part (Example: Pancreas)
+- Individual sample (Example: Patient 1)
+- Quality of SNP call
+- Cell type (Example: Ductal cell)
+- Sex of sample
+- Disease (Example: Diabetes)
+
+Interactively exploring how these variables are correlated to SNPs can aid in the assessment of clinically relevant variants. Our interactive application is mainly built upon an awesome R package [Shiny](https://shiny.rstudio.com/).
   
 ## How to use ViRGo
-1. Download this repo: `git clone --recursive https://github.com/NCBI-Hackathons/ViRGo`
-2. Collecting output files generated beforehand: `python3 collect_output.py`
-3. Follow the steps in [MergeTwoFiles.Rmd](MergeTwoFiles.Rmd) to generate the [m1.Rds](m1.Rds)
-4. run [Visualize.R](Visualize.R) as a shiny app.
+1. Download this Repository: `git clone --recursive https://github.com/NCBI-Hackathons/ViRGo`
+2. Collect output files generated beforehand: `python3 collect_output.py`
+3. Follow the steps in [MergeTwoFiles.R](MergeTwoFiles.R) to generate the file [/data/merged.Rds](/data/merged.Rds)
+4. Run the Shiny application [ViRGo_app.R](ViRGo_app.R) to interact with the merged data.
+
+![alt text](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
+
+
 
 ## Dependencies
 * Python 3
@@ -27,12 +43,13 @@ Variant Report Generator (ViRGo) is a reporting and variant browser tools that a
     * plotly (>= 4.7.1)
     * dplyr (>= 0.7.4)
     * DT (>= 0.2)
+    
 ## Presentation
 * [1/22 two page slides](./presentation/Presentation_012218.pptx)
 * [1/23 four page slides](https://docs.google.com/presentation/d/1YjBH5frG3v0PLQ3x3KwyDh3pNva85L7tBzYqLTyb7h0/edit#slide=id.p)
   
 ## Notes
-* [E-MTAB-5061.sdrf.txt](E-MTAB-5061.sdrf.txt) is from [ArrayExpress](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-5061/).
-* Based on output files of a [customized version](https://github.com/hsiaoyi0504/SC3) of [SC3](https://github.com/NCBI-Hackathons/SC3), which is a product of previous NCBI Hackathon.
+* [data/E-MTAB-5061.sdrf.txt](./data/E-MTAB-5061.sdrf.txt) is from [ArrayExpress](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-5061/).
+* Based on output files of a [customized version](https://github.com/hsiaoyi0504/SC3) of [SC3](https://github.com/NCBI-Hackathons/SC3), which is a product of previous NCBI Hackathons.
 * [collect_output.py](collect_output.py) is for merging files generated from [SC3]((https://github.com/hsiaoyi0504/SC3)).
-* [m1_sub.Rds](m1_sub.Rds), [m1.Rds](m1.Rds) is file genreated by [MergeTwoFiles.Rmd](MergeTwoFiles.Rmd)
+* [data/merged_sub.Rds](./data/merged_sub.Rds) and [data/merged.Rds](./data/merged.Rds) are files generated by the script [MergeTwoFiles.R](MergeTwoFiles.R)
