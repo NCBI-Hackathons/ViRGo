@@ -20,7 +20,7 @@ Variant Report Generator (ViRGo) is a reporting and variant browser tools that a
 ## Dependencies
 * Python 3
 * R (>= 3.4.1)
-  * packages:
+  * Packages:
     * shiny (>= 1.0.5)
     * tidyr (>= 0.7.2)
     * ggplot2 (>= 2.2.1)
