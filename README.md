@@ -1,6 +1,6 @@
 # ViRGo: Variant Report Generator 
 
-View a live demonstration of our application [here](https://hsiaoyi0504.shinyapps.io/virgo/) !
+View a live demonstration of our application [here](https://hsiaoyi0504.shinyapps.io/virgo/)!
 
 ## Introduction   
 This project is mainly based on combining and then exploring output files generated from [SC3](https://github.com/NCBI-Hackathons/SC3), which is a previous product of the NCBI Hackathons. SC3 was built upon [PSST](https://github.com/NCBI-Hackathons/PSST), which was also developed in prior NCBI Hackathons. The two input parameters of SC3 are a [NCBI BioProject accession number](https://www.ncbi.nlm.nih.gov/bioproject/) and a gene or disease of interest. With this information, SC3 has the functionality to map each [SRA experiment](https://www.ncbi.nlm.nih.gov/sra) in that BioProject to the SNP information gathered from [NCBI ClinVar](https://www.ncbi.nlm.nih.gov/clinvar/). We implemented a customized version of [SC3](https://github.com/hsiaoyi0504/SC3) to allow it to operate on Ubuntu without the SLURM workload manager.
@@ -31,8 +31,6 @@ Interactively exploring how these variables are correlated to SNPs can aid in th
 
 ![Flowchart](https://github.com/NCBI-Hackathons/ViRGo/blob/master/flowcharts/flowChart.png)
 
-
-
 ## Dependencies
 * Python 3
 * R (>= 3.4.1)
@@ -45,8 +43,8 @@ Interactively exploring how these variables are correlated to SNPs can aid in th
     * DT (>= 0.2)
     
 ## Presentation
-* [1/22 two page slides](./presentation/Presentation_012218.pptx)
-* [1/23 four page slides](https://docs.google.com/presentation/d/1YjBH5frG3v0PLQ3x3KwyDh3pNva85L7tBzYqLTyb7h0/edit#slide=id.p)
+* [January 22 Hackathon Slides](./presentation/Presentation_012218.pptx)
+* [January 23 Hackathon Slides](https://docs.google.com/presentation/d/1YjBH5frG3v0PLQ3x3KwyDh3pNva85L7tBzYqLTyb7h0/edit#slide=id.p)
   
 ## Notes
 * [data/E-MTAB-5061.sdrf.txt](./data/E-MTAB-5061.sdrf.txt) is from [ArrayExpress](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-5061/).
