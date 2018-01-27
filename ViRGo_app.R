@@ -223,7 +223,9 @@ server <- function(input, output) {
   })
 
   output$summary <- renderPrint({
-    summary(data[input$column])
+    df <- as.data.frame(summary(data[[input$column]], maxsum = nlevels(data[[input$column]])))
+    #df <- df[(-which(df[[1]]==0)),]
+    `names<-`(df, input$column)
   })
 
   output$sidebar_unique <- renderUI({

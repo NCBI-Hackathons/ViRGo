@@ -21,7 +21,8 @@ mainPanel(
 server <- function(input, output) {
 
   output$summary <- renderPrint({
-    summary(data[input$column])
+    df <- as.data.frame(summary(data[[input$column]], maxsum = nlevels(data[[input$column]])))
+    `names<-`(df, input$column)
   })
   
   output$unique <- renderPrint({
