@@ -29,7 +29,7 @@ Interactively exploring how these variables are correlated to SNPs can aid in th
 3. Follow the steps in [MergeTwoFiles.R](MergeTwoFiles.R) to generate the file [/data/merged.Rds](/data/merged.Rds)
 4. Run the Shiny application [ViRGo_app.R](ViRGo_app.R) to interact with the merged data.
 
-![alt text](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
+![Flowchart](https://github.com/NCBI-Hackathons/ViRGo/blob/master/flowcharts/flowChart.png)
 
 
 
