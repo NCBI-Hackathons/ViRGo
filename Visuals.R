@@ -97,7 +97,7 @@ ui <- fluidPage(
                     radioButtons(inputId = "Fill",
                      label = "Fill by",
                      choices = colnames(data)[-which(colnames(data) %in% c("Heterozygous.SNP","Homozygous.SNP"))],
-                     selected = "Disease") 
+                     selected = "Cell") 
                   ),
                   mainPanel(
                     plotlyOutput("homoBarPlot"),
