@@ -79,9 +79,6 @@ ui <- fluidPage(
                 tabPanel("Summary", value=2,
                   sidebarPanel(uiOutput("sidebar_summary")),
                   verbatimTextOutput("summary")),
-                tabPanel("Unique", value=3,
-                  sidebarPanel(uiOutput("sidebar_unique")),
-                  verbatimTextOutput("unique")),
                 tabPanel("SNP Count Visualization", value=4,
                   sidebarPanel(
                     selectizeInput(inputId = "Organism", label ="Organism", choices = unique(data$Organism), selected = unique(data$Organism), multiple = TRUE, options = NULL),
@@ -213,19 +210,27 @@ server <- function(input, output) {
     if (input$tabs == 2){
       radioButtons(inputId = "column",
                    label = "Choose a column:",
-                   choices = colnames(data)[1:9])
+                   choices = colnames(data))
     }
   })
 
   output$summary <- renderPrint({
-    df <- as.data.frame(summary(data[[input$column]], maxsum = nlevels(data[[input$column]])))
-    keepOrder = order(df[1], decreasing = TRUE)
-    
-    df2 <- as.data.frame(df[keepOrder,])
-    df3 <- as.data.frame(df2[rowSums(df2 > 0) >= 1, ])
-    rownames(df3) <- rownames(df)[keepOrder][1:nrow(df3)]
-    
-    `names<-`(df3, input$column)
+    if (input$column %in% c("Homozygous.SNP","Heterozygous.SNP")){
+      df <- as.data.frame(summary(data[[input$column]], maxsum = nlevels(data[[input$column]])))
+      vec <- unlist(sapply(data[[input$column]], function(x) unlist(strsplit(as.character(x), ";"))))
+      df2 <- as.data.frame(table(vec))
+      colnames(df2) <- c("", input$column)
+      df3 <- df2[order(df2[[input$column]], decreasing = TRUE),]
+      print(df3, row.names = FALSE)  
+    }
+    else{
+      df <- as.data.frame(summary(data[[input$column]], maxsum = nlevels(data[[input$column]])))
+      keepOrder = order(df[1], decreasing = TRUE)
+      df2 <- as.data.frame(df[keepOrder,])
+      df3 <- as.data.frame(df2[rowSums(df2 > 0) >= 1, ])
+      rownames(df3) <- rownames(df)[keepOrder][1:nrow(df3)]
+      `names<-`(df3, input$column)      
+    }
   })
 
   output$sidebar_unique <- renderUI({
@@ -234,13 +239,6 @@ server <- function(input, output) {
                    label = "Choose a column:",
                    choices = colnames(data))
     }
-  })
-
-  output$unique <- renderPrint({
-    #unique(data[input$column2])
-    
-    cat(as.character(unique(data[[input$column2]])), sep="\n\n")
-    
   })
 
   output$homoBarPlot <- renderPlotly({
