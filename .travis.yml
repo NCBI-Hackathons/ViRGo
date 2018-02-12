@@ -5,6 +5,9 @@ branches:
   - master
   - travis_deploy
 
+r_packages:
+  - rsconnect
+
 script:
   - mkdir ./deploy
   - mkdir ./deploy/data
