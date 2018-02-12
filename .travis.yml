@@ -1,0 +1,15 @@
+language: r
+sudo: required
+branches:
+  only:
+  - master
+  - travis_deploy
+
+script:
+  - mkdir ./deploy
+  - mkdir ./deploy/data
+  - cp ./ViRGo_app.R deploy/app.R
+  - cp ./data/merged_sub.Rds deploy/data
+  - cp ./build.R deploy
+  - cd deploy
+  - ./build.R
