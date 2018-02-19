@@ -232,7 +232,6 @@ server <- function(input, output) {
       df2 <- as.data.frame(df[keepOrder,])
       df3 <- as.data.frame(df2[rowSums(df2 > 0) >= 1, ])
       df4 <- data.frame(col = rownames(df)[keepOrder][1:nrow(df3)], NumOfRows = df3[,1])
-      #`names<-`(df4, c(input$column, "NumOfRows"))
       print(`names<-`(df4, c(input$column, "NumOfRows")), row.names = FALSE)
     }
   })
