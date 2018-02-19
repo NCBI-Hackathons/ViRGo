@@ -22,7 +22,7 @@ dataFinal <- as.data.frame(table(data)) %>% arrange(Heterozygous.SNP) %>% filter
 dataBox = dcast(data = dataFinal,formula = Heterozygous.SNP~Individual,fun.aggregate = sum,value.var = "Freq")
 
 # Make Heatmap with SNPs on y-axis, individual on x-axis, and SNP count as color
-# Heatmap is ordered with 6 normal individuals first, then 4 individuals with disease
+# X-axis is ordered with 6 normal individuals first, then 4 individuals with disease
 heatData = dataBox
 rownames(heatData) = dataBox$Heterozygous.SNP
 heatData = heatData[2:ncol(heatData)]
