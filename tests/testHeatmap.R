@@ -1,4 +1,9 @@
 ################ With real data ################ 
+library(dplyr)
+library(tidyr)
+library(data.table)
+library(plotly)
+
 nInd=10
 data <- readRDS("../data/merged_sub.Rds")
 
