@@ -217,22 +217,24 @@ server <- function(input, output) {
   })
   
   output$summary <- renderPrint({
-    if (input$column %in% c("Homozygous.SNP","Heterozygous.SNP")){
-      df <- as.data.frame(summary(data[[input$column]], maxsum = nlevels(data[[input$column]])))
-      vec <- unlist(sapply(data[[input$column]], function(x) unlist(strsplit(as.character(x), ";"))))
-      df2 <- as.data.frame(table(vec))
-      colnames(df2) <- c("", input$column)
-      df3 <- df2[order(df2[[input$column]], decreasing = TRUE),]
-      colnames(df3) <- c(input$column, "NumOfRows")
-      print(df3, row.names = FALSE)  
-    }
-    else{
-      df <- as.data.frame(summary(data[[input$column]], maxsum = nlevels(data[[input$column]])))
-      keepOrder = order(df[1], decreasing = TRUE)
-      df2 <- as.data.frame(df[keepOrder,])
-      df3 <- as.data.frame(df2[rowSums(df2 > 0) >= 1, ])
-      df4 <- data.frame(col = rownames(df)[keepOrder][1:nrow(df3)], NumOfRows = df3[,1])
-      print(`names<-`(df4, c(input$column, "NumOfRows")), row.names = FALSE)
+    if (!is.null(input$column)) {
+      if (input$column %in% c("Homozygous.SNP","Heterozygous.SNP")){
+        df <- as.data.frame(summary(data[[input$column]], maxsum = nlevels(data[[input$column]])))
+        vec <- unlist(sapply(data[[input$column]], function(x) unlist(strsplit(as.character(x), ";"))))
+        df2 <- as.data.frame(table(vec))
+        colnames(df2) <- c("", input$column)
+        df3 <- df2[order(df2[[input$column]], decreasing = TRUE),]
+        colnames(df3) <- c(input$column, "NumOfRows")
+        print(df3, row.names = FALSE)  
+      }
+      else{
+        df <- as.data.frame(summary(data[[input$column]], maxsum = nlevels(data[[input$column]])))
+        keepOrder = order(df[1], decreasing = TRUE)
+        df2 <- as.data.frame(df[keepOrder,])
+        df3 <- as.data.frame(df2[rowSums(df2 > 0) >= 1, ])
+        df4 <- data.frame(col = rownames(df)[keepOrder][1:nrow(df3)], NumOfRows = df3[,1])
+        print(`names<-`(df4, c(input$column, "NumOfRows")), row.names = FALSE)
+      }
     }
   })
   
