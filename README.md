@@ -26,7 +26,7 @@ Interactively exploring how these variables are correlated to SNPs can aid in th
 ## How to use ViRGo
 1. Download this Repository: `git clone --recursive https://github.com/NCBI-Hackathons/ViRGo`
 2. Collect output files generated beforehand: `python3 collect_output.py`
-3. Follow the steps in [MergeTwoFiles.R](MergeTwoFiles.R) to generate the file [/data/merged.Rds](/data/merged.Rds)
+3. Follow the steps in [MergeTwoFiles.R](MergeTwoFiles.R) to generate the file [data/merged.Rds](data/merged.Rds)
 4. Run the Shiny application [ViRGo_app.R](ViRGo_app.R) to interact with the merged data.
 
 ![Flowchart](https://github.com/NCBI-Hackathons/ViRGo/blob/master/flowcharts/flowChart.png)
